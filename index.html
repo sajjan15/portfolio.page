@@ -1,131 +1,421 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sajjan Gautam — Portfolio</title>
-  <meta name="description" content="Sajjan Gautam — Aspiring Software Developer Portfolio">
+  <meta name="description" content="Sajjan Gautam — Aspiring Software Developer. Front-end, Back-end, Projects, Experience.">
   <meta name="author" content="Sajjan Gautam">
   <meta name="theme-color" content="#0f172a">
 
-  <!-- External stylesheet -->
+  <!-- Base stylesheet (keep your existing theme) -->
   <link rel="stylesheet" href="assets/styles.css">
+
+  <!-- A few extra styles for animations & layout components (component-level overrides) -->
+  <style>
+    /* Extra component styles (keeps main theme in assets/styles.css) */
+    .hero {
+      min-height: 56vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 28px;
+      align-items: center;
+      padding: 28px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr; padding:18px} }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    .tagline-typed { color: var(--accent); font-weight:700; }
+
+    .skill-bar { height:10px; border-radius:8px; background: rgba(255,255,255,0.04); overflow:hidden; }
+    .skill-bar-inner { height:100%; width:0%; border-radius:8px; transition:width 1.2s ease; background: linear-gradient(90deg,var(--accent), #7c3aed); }
+
+    .counter { font-size:28px; font-weight:700; color: #e6eef8; }
+
+    .project-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    @media (max-width:980px){ .project-grid{grid-template-columns:1fr} }
+
+    .project-card { overflow:hidden; border-radius:10px; display:flex; gap:12px; align-items:center; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+    .project-thumb { width:120px; height:76px; border-radius:8px; background-size:cover; background-position:center; flex-shrink:0; }
+
+    .timeline { display:flex; flex-direction:column; gap:18px; }
+    .timeline-item { display:flex; gap:12px; align-items:flex-start; }
+    .timeline-dot { width:12px; height:12px; border-radius:999px; background:var(--accent); margin-top:6px; flex-shrink:0; box-shadow:0 4px 12px rgba(6,182,212,0.12); }
+
+    .testimonial { padding:18px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); }
+
+    .top-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 22px;
+      z-index: 999;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg,var(--accent), #7c3aed);
+      color: #021126;
+      font-weight:800;
+      border:none;
+      box-shadow: 0 8px 20px rgba(9,12,20,0.6);
+      cursor:pointer;
+      display:none;
+    }
+
+    /* small helpers */
+    .muted-sm { color: var(--muted); font-size:13px }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    @media (max-width:980px){ .grid-3{grid-template-columns:1fr} }
+  </style>
+
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/9b2f9a2c6b.js" crossorigin="anonymous"></script>
+
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- Typed.js for typed header -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
 </head>
 <body>
   <div class="container" role="main">
-    <header>
-      <div class="brand">
-        <div class="avatar">SG</div>
+
+    <!-- Header -->
+    <header style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div style="display:flex;gap:14px;align-items:center">
+        <div class="avatar" aria-hidden>SG</div>
         <div>
-          <h1>Sajjan Gautam</h1>
-          <div class="tagline">Aspiring Software Developer — Front-end & Full-stack · Java · .NET · React</div>
+          <h1 style="margin:0">Sajjan Gautam</h1>
+          <div class="tagline muted-sm">Aspiring Software Developer — Front-end & Full-stack</div>
         </div>
       </div>
 
-      <nav aria-label="Primary">
+      <nav style="display:flex;gap:10px;align-items:center">
         <a class="btn" href="#projects">Projects</a>
+        <a class="btn" href="#experience">Experience</a>
         <a class="btn" href="#contact">Contact</a>
-        <a class="btn" href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+        <a class="btn" href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" rel="noopener">Resume</a>
       </nav>
     </header>
 
-    <main>
-      <section class="card about">
-        <h2>About</h2>
-        <p>I am a motivated computer science student and aspiring software developer with hands-on experience building web and desktop applications. I enjoy writing clean, maintainable code and improving user experiences through thoughtful front-end design and robust back-end services.</p>
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-card" data-aos="fade-right">
+        <h2 style="margin-top:0">Hi, I'm Sajjan — <span class="tagline-typed" id="typed-target"></span></h2>
+        <p class="muted-sm">I build polished front-end experiences and reliable back-end services. I love readable code, accessible UI, and solving product problems.</p>
 
-        <div class="divider"></div>
+        <div style="display:flex;gap:12px;margin-top:16px;align-items:center">
+          <a class="btn" href="#projects">View Projects</a>
+          <a class="btn" href="#contact">Get in touch</a>
+        </div>
 
-        <h3>Technical skills</h3>
-        <div class="skills">
-          <span class="pill">Java</span>
-          <span class="pill">C# / .NET Core</span>
-          <span class="pill">JavaScript</span>
-          <span class="pill">React</span>
-          <span class="pill">HTML &amp; CSS</span>
+        <div style="display:flex;gap:12px;margin-top:18px;align-items:center">
+          <div style="text-align:center">
+            <div class="counter" data-target="18">0</div>
+            <div class="muted-sm">Months experience</div>
+          </div>
+          <div style="text-align:center">
+            <div class="counter" data-target="10">0</div>
+            <div class="muted-sm">Projects</div>
+          </div>
+          <div style="text-align:center">
+            <div class="counter" data-target="3">0</div>
+            <div class="muted-sm">Technologies</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-card" data-aos="fade-left">
+        <h3 style="margin-top:0">Skills</h3>
+
+        <div style="margin-top:8px">
+          <div class="muted-sm">JavaScript</div>
+          <div class="skill-bar" aria-hidden><div class="skill-bar-inner" data-percent="85"></div></div>
+        </div>
+
+        <div style="margin-top:8px">
+          <div class="muted-sm">React</div>
+          <div class="skill-bar" aria-hidden><div class="skill-bar-inner" data-percent="78"></div></div>
+        </div>
+
+        <div style="margin-top:8px">
+          <div class="muted-sm">Java / Spring</div>
+          <div class="skill-bar" aria-hidden><div class="skill-bar-inner" data-percent="72"></div></div>
+        </div>
+
+        <div style="margin-top:8px">
+          <div class="muted-sm">C# / .NET</div>
+          <div class="skill-bar" aria-hidden><div class="skill-bar-inner" data-percent="68"></div></div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="pill">HTML</span>
+          <span class="pill">CSS</span>
           <span class="pill">MSSQL</span>
           <span class="pill">REST APIs</span>
-          <span class="pill">Git &amp; GitHub</span>
-        </div>
-
-        <div class="divider"></div>
-
-        <h3 id="projects">Selected projects</h3>
-        <div class="projects">
-          <article class="project card">
-            <div class="meta">
-              <h3>Clinic Management System</h3>
-              <p>RESTful web services for clinic operations — doctors, patients, scheduling. Built with Java and GlassFish; includes CRUD endpoints and integration tests.</p>
-            </div>
-            <div>
-              <a class="link-inline" href="https://github.com/sajjan15/Web-Services" target="_blank" rel="noopener">View repo ↗</a>
-            </div>
-          </article>
-
-          <article class="project card">
-            <div class="meta">
-              <h3>Employee Management System</h3>
-              <p>ASP.NET Core app with MSSQL back-end for HR workflows: authentication, role-based access, payroll and leave management.</p>
-            </div>
-            <div>
-              <a class="link-inline" href="https://github.com/sajjan15/Application-Development-I" target="_blank" rel="noopener">View repo ↗</a>
-            </div>
-          </article>
-
-          <article class="project card">
-            <div class="meta">
-              <h3>BMCT Cars — Front End</h3>
-              <p>Responsive front-end for a car dealership: product pages, booking forms and a client-side car comparison tool.</p>
-            </div>
-            <div>
-              <a class="link-inline" href="https://github.com/sajjan15/Front-End-Web-Programming" target="_blank" rel="noopener">View repo ↗</a>
-            </div>
-          </article>
-        </div>
-
-        <div class="divider"></div>
-
-        <h3>Experience</h3>
-        <p class="muted">Forum Research — Outbound Interviewer (Jan 2024 – May 2024)</p>
-        <ul style="margin-left:18px;color:var(--muted)">
-          <li>Conducted computer-assisted telephone surveys, ensuring data quality and confidentiality.</li>
-          <li>Maintained accurate records and adhered to tight project timelines.</li>
-        </ul>
-
-        <div class="divider"></div>
-
-        <h3>Education</h3>
-        <p class="muted">Vanier College — AEC in Software Development (Expected Aug 2025)</p>
-      </section>
-
-      <aside class="sidebar" id="contact">
-        <div class="card contact">
-          <h2>Contact</h2>
-          <div class="info-list">
-            <div class="info-row"><strong>Email</strong><span class="muted">sajjangautam28@gmail.com</span></div>
-            <div class="info-row"><strong>Phone</strong><span class="muted">+1 514-576-4015</span></div>
-            <div class="info-row"><strong>Location</strong><span class="muted">Montreal, QC, Canada</span></div>
-            <div class="info-row"><strong>LinkedIn</strong><a class="muted link-inline" href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" rel="noopener">View profile</a></div>
-            <div class="info-row"><strong>GitHub</strong><a class="muted link-inline" href="https://github.com/sajjan15" target="_blank" rel="noopener">github.com/sajjan15</a></div>
-          </div>
-
-          <div class="divider"></div>
-
-          <h3>Quick facts</h3>
-          <div class="muted" style="font-size:13px">
-            <div><strong>Languages:</strong> English (Fluent), Chinese (Intermediate), French (Beginner)</div>
-            <div style="margin-top:8px"><strong>Open to:</strong> Front-end internships, junior web developer roles</div>
-          </div>
+          <span class="pill">Git</span>
         </div>
       </aside>
-    </main>
+    </section>
 
-    <footer>
-      <div class="muted">Made with care • © <span id="year"></span> Sajjan Gautam</div>
+    <!-- ABOUT (longer storytelling) -->
+    <section class="card" style="margin-top:18px" data-aos="fade-up">
+      <h2>About Me</h2>
+      <p class="muted-sm">I’m a computer science student with a practical approach: build small, test often, and keep the user in mind. I started with desktop apps and moved into web development where I enjoy crafting responsive interfaces and reliable APIs.</p>
+
+      <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:16px">
+        <div>
+          <h4 style="margin:6px 0">What I enjoy</h4>
+          <ul style="margin-left:18px;color:var(--muted)">
+            <li>Turning UI designs into clean, accessible code</li>
+            <li>Writing RESTful APIs and integrating databases</li>
+            <li>Improving performance and reducing load times</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="margin:6px 0">My goals</h4>
+          <ul style="margin-left:18px;color:var(--muted)">
+            <li>Contribute to collaborative teams</li>
+            <li>Work on user-facing applications</li>
+            <li>Learn more about testing and DevOps</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" style="margin-top:18px">
+      <h2 data-aos="fade-up">Selected Projects</h2>
+
+      <div class="project-grid" style="margin-top:12px">
+        <div class="project-card" data-aos="fade-up" data-aos-delay="50">
+          <div class="project-thumb" style="background-image:url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=60')"></div>
+          <div style="flex:1">
+            <h3 style="margin:0">Clinic Management System</h3>
+            <p class="muted-sm" style="margin:6px 0 0 0">Java-based REST services with GlassFish; scheduling and patient management APIs.</p>
+            <a class="link-inline" href="https://github.com/sajjan15/Web-Services" target="_blank" rel="noopener">View repo ↗</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="project-thumb" style="background-image:url('https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=800&q=60')"></div>
+          <div style="flex:1">
+            <h3 style="margin:0">Employee Management System</h3>
+            <p class="muted-sm" style="margin:6px 0 0 0">ASP.NET Core + MSSQL for HR workflows, authentication and payroll integration.</p>
+            <a class="link-inline" href="https://github.com/sajjan15/Application-Development-I" target="_blank" rel="noopener">View repo ↗</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-aos="fade-up" data-aos-delay="150">
+          <div class="project-thumb" style="background-image:url('https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=800&q=60')"></div>
+          <div style="flex:1">
+            <h3 style="margin:0">BMCT Cars — Front End</h3>
+            <p class="muted-sm" style="margin:6px 0 0 0">Responsive front-end with dynamic comparison UI and user-friendly booking flows.</p>
+            <a class="link-inline" href="https://github.com/sajjan15/Front-End-Web-Programming" target="_blank" rel="noopener">View repo ↗</a>
+          </div>
+        </div>
+
+        <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="project-thumb" style="background-image:url('https://images.unsplash.com/photo-1526378724658-c41f3b4b6f3a?auto=format&fit=crop&w=800&q=60')"></div>
+          <div style="flex:1">
+            <h3 style="margin:0">Open-source Contributions</h3>
+            <p class="muted-sm" style="margin:6px 0 0 0">A selection of small fixes and helper scripts across different repos.</p>
+            <a class="link-inline" href="https://github.com/sajjan15" target="_blank" rel="noopener">View GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE / TIMELINE -->
+    <section id="experience" style="margin-top:18px" class="card" data-aos="fade-up">
+      <h2>Experience & Timeline</h2>
+      <div class="timeline" style="margin-top:12px">
+        <div class="timeline-item" data-aos="fade-right">
+          <div class="timeline-dot" aria-hidden></div>
+          <div>
+            <strong>Forum Research — Outbound Interviewer</strong>
+            <div class="muted-sm">Jan 2024 — May 2024</div>
+            <p class="muted-sm" style="margin-top:6px">Conducted computer-assisted telephone surveys; maintained accurate records and followed strict data handling procedures.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="50">
+          <div class="timeline-dot" aria-hidden></div>
+          <div>
+            <strong>Consultation SOS — Team Project</strong>
+            <div class="muted-sm">Ongoing</div>
+            <p class="muted-sm" style="margin-top:6px">Working on web migrations and front-end improvements for clients (animal shelters, nonprofits).</p>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="100">
+          <div class="timeline-dot" aria-hidden></div>
+          <div>
+            <strong>Vanier College — AEC in Software Development</strong>
+            <div class="muted-sm">Sept 2023 — Expected Aug 2025</div>
+            <p class="muted-sm" style="margin-top:6px">Formal training in web, desktop and mobile application development.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section style="margin-top:18px" data-aos="fade-up">
+      <h2>Testimonials</h2>
+      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+        <div class="testimonial" style="flex:1;min-width:220px" data-aos="zoom-in">
+          <p class="muted-sm">"Sajjan consistently delivered clean code and communicated well with the team."</p>
+          <div style="margin-top:8px;font-weight:700">— Team Lead</div>
+        </div>
+        <div class="testimonial" style="flex:1;min-width:220px" data-aos="zoom-in" data-aos-delay="80">
+          <p class="muted-sm">"Fast learner and eager to improve — contributed critical fixes to our project on time."</p>
+          <div style="margin-top:8px;font-weight:700">— Senior Developer</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="card" style="margin-top:18px" data-aos="fade-up">
+      <h2>Contact</h2>
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:14px">
+        <div>
+          <p class="muted-sm">If you'd like to connect about internships, remote roles, or collaborations, please reach out — I'm happy to chat.</p>
+
+          <!-- Basic contact form (mailto fallback). For production, replace action with Formspree or backend service -->
+          <form action="mailto:sajjangautam28@gmail.com" method="post" enctype="text/plain">
+            <div style="display:grid;gap:8px">
+              <input name="name" placeholder="Your name" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" required>
+              <input name="email" placeholder="Your email" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" required>
+              <textarea name="message" rows="5" placeholder="Message" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" required></textarea>
+              <div style="display:flex;gap:8px;align-items:center">
+                <button class="btn" type="submit">Send (mailto)</button>
+                <a class="btn" href="https://formspree.io/f/your-id" target="_blank" rel="noopener">Use Formspree (optional)</a>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <aside class="hero-card" style="height:100%">
+          <h3 style="margin-top:0">Quick Contact</h3>
+          <div class="muted-sm" style="margin-top:6px">
+            <div><strong>Email:</strong> <a class="link-inline" href="mailto:sajjangautam28@gmail.com">sajjangautam28@gmail.com</a></div>
+            <div style="margin-top:6px"><strong>Phone:</strong> +1 514-576-4015</div>
+            <div style="margin-top:6px"><strong>Location:</strong> Montreal, QC, Canada</div>
+            <div style="margin-top:8px"><strong>GitHub:</strong> <a class="link-inline" href="https://github.com/sajjan15">github.com/sajjan15</a></div>
+            <div style="margin-top:6px"><strong>LinkedIn:</strong> <a class="link-inline" href="https://www.linkedin.com/in/sajjan-gautam-68891a19a">View profile</a></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="margin-top:22px;padding:18px;text-align:center;color:var(--muted)" data-aos="fade-up">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
+        <a class="link-inline" href="https://github.com/sajjan15" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+        <a class="link-inline" href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        <a class="link-inline" href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" rel="noopener"><i class="far fa-file-pdf"></i> Resume</a>
+      </div>
+      <div style="margin-top:8px" class="muted-sm">© <span id="year"></span> Sajjan Gautam — Made with care</div>
     </footer>
+
   </div>
 
+  <!-- Back to top button -->
+  <button id="topBtn" class="top-btn" aria-label="Back to top">↑</button>
+
+  <!-- JS: AOS init, typed.js, counters, skill bars, interactions -->
   <script>
+    // AOS init
+    AOS.init({ duration: 700, easing: 'ease-out-quart', once: true });
+
+    // Typed.js for tagline
+    const typed = new Typed('#typed-target', {
+      strings: ['Front-end Developer', 'Full-stack Builder', 'Problem Solver'],
+      typeSpeed: 60,
+      backSpeed: 30,
+      backDelay: 1400,
+      loop: true
+    });
+
+    // animate counters when visible
+    function animateCounters() {
+      const counters = document.querySelectorAll('.counter');
+      const options = { threshold: 0.5 };
+      const cb = function(entries, obs) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = +el.getAttribute('data-target');
+            const duration = 1100;
+            const start = 0;
+            let startTime = null;
+            function step(timestamp) {
+              if (!startTime) startTime = timestamp;
+              const progress = timestamp - startTime;
+              const value = Math.min(Math.floor(progress / duration * target), target);
+              el.textContent = value;
+              if (progress < duration) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+            obs.unobserve(el);
+          }
+        });
+      };
+      const observer = new IntersectionObserver(cb, options);
+      counters.forEach(c => observer.observe(c));
+    }
+    animateCounters();
+
+    // Animate skill bars on scroll
+    function animateSkillBars() {
+      const bars = document.querySelectorAll('.skill-bar-inner');
+      const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const el = e.target;
+            const percent = el.getAttribute('data-percent') || 70;
+            el.style.width = percent + '%';
+            o.unobserve(el);
+          }
+        });
+      }, { threshold: 0.4 });
+      bars.forEach(b => obs.observe(b));
+    }
+    animateSkillBars();
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (href.length > 1) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Back-to-top button show/hide
+    const topBtn = document.getElementById('topBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) topBtn.style.display = 'block';
+      else topBtn.style.display = 'none';
+    });
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // small accessibility: focus outlines on keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') document.body.classList.add('show-focus-outline');
+    });
+
+    // set year
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
