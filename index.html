@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sajjan Gautam — Portfolio</title>
+  <meta name="description" content="Sajjan Gautam — Aspiring Software Developer Portfolio">
+  <meta name="author" content="Sajjan Gautam">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <div class="brand">
+        <div class="avatar">SG</div>
+        <div>
+          <h1>Sajjan Gautam</h1>
+          <div class="tagline">Aspiring Software Developer — Front-end & Full-stack · Java · .NET · React</div>
+        </div>
+      </div>
+
+      <nav aria-label="Primary">
+        <a class="btn" href="#projects">Projects</a>
+        <a class="btn" href="#contact">Contact</a>
+        <a class="btn" href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="card about">
+        <h2>About</h2>
+        <p>I am a motivated computer science student and aspiring software developer with hands-on experience building web and desktop applications. I enjoy writing clean, maintainable code and improving user experiences through thoughtful front-end design and robust back-end services.</p>
+
+        <div class="divider"></div>
+
+        <h3>Technical skills</h3>
+        <div class="skills">
+          <span class="pill">Java</span>
+          <span class="pill">C# / .NET Core</span>
+          <span class="pill">JavaScript</span>
+          <span class="pill">React</span>
+          <span class="pill">HTML &amp; CSS</span>
+          <span class="pill">MSSQL</span>
+          <span class="pill">REST APIs</span>
+          <span class="pill">Git &amp; GitHub</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 id="projects">Selected projects</h3>
+        <div class="projects">
+          <article class="project card">
+            <div class="meta">
+              <h3>Clinic Management System</h3>
+              <p>RESTful web services for clinic operations — doctors, patients, scheduling. Built with Java and GlassFish; includes CRUD endpoints and integration tests.</p>
+            </div>
+            <div>
+              <a class="link-inline" href="https://github.com/sajjan15/Web-Services" target="_blank" rel="noopener">View repo ↗</a>
+            </div>
+          </article>
+
+          <article class="project card">
+            <div class="meta">
+              <h3>Employee Management System</h3>
+              <p>ASP.NET Core app with MSSQL back-end for HR workflows: authentication, role-based access, payroll and leave management.</p>
+            </div>
+            <div>
+              <a class="link-inline" href="https://github.com/sajjan15/Application-Development-I" target="_blank" rel="noopener">View repo ↗</a>
+            </div>
+          </article>
+
+          <article class="project card">
+            <div class="meta">
+              <h3>BMCT Cars — Front End</h3>
+              <p>Responsive front-end for a car dealership: product pages, booking forms and a client-side car comparison tool.</p>
+            </div>
+            <div>
+              <a class="link-inline" href="https://github.com/sajjan15/Front-End-Web-Programming" target="_blank" rel="noopener">View repo ↗</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Experience</h3>
+        <p class="muted">Forum Research — Outbound Interviewer (Jan 2024 – May 2024)</p>
+        <ul style="margin-left:18px;color:var(--muted)">
+          <li>Conducted computer-assisted telephone surveys, ensuring data quality and confidentiality.</li>
+          <li>Maintained accurate records and adhered to tight project timelines.</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <h3>Education</h3>
+        <p class="muted">Vanier College — AEC in Software Development (Expected Aug 2025)</p>
+      </section>
+
+      <aside class="sidebar" id="contact">
+        <div class="card contact">
+          <h2>Contact</h2>
+          <div class="info-list">
+            <div class="info-row"><strong>Email</strong><span class="muted">sajjangautam28@gmail.com</span></div>
+            <div class="info-row"><strong>Phone</strong><span class="muted">+1 514-576-4015</span></div>
+            <div class="info-row"><strong>Location</strong><span class="muted">Montreal, QC, Canada</span></div>
+            <div class="info-row"><strong>LinkedIn</strong><a class="muted link-inline" href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" rel="noopener">View profile</a></div>
+            <div class="info-row"><strong>GitHub</strong><a class="muted link-inline" href="https://github.com/sajjan15" target="_blank" rel="noopener">github.com/sajjan15</a></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3>Quick facts</h3>
+          <div class="muted" style="font-size:13px">
+            <div><strong>Languages:</strong> English (Fluent), Chinese (Intermediate), French (Beginner)</div>
+            <div style="margin-top:8px"><strong>Open to:</strong> Front-end internships, junior web developer roles</div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="muted">Made with care • © <span id="year"></span> Sajjan Gautam</div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
