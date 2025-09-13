@@ -4,13 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sajjan Gautam — Portfolio</title>
-  <meta name="description" content="Sajjan Gautam — Aspiring Software Developer. Front-end & full-stack portfolio with animated UI.">
-  <meta name="author" content="Sajjan Gautam">
+  <meta name="description" content="Sajjan Gautam — Software Developer. Front-end & Full-stack portfolio with rich animations." />
+  <meta name="author" content="Sajjan Gautam" />
 
-  <!-- Tailwind CDN (for quick dev) -->
+  <!-- Tailwind (no build step) -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Customize Tailwind (extend) -->
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -31,22 +29,20 @@
             mono: ['Fira Code', 'ui-monospace', 'SFMono-Regular']
           },
           boxShadow: {
-            'fancy': '0 10px 40px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02)'
+            fancy: '0 12px 44px rgba(2,6,23,0.55), inset 0 1px 0 rgba(255,255,255,0.03)',
+            glow: '0 0 0 2px rgba(6,182,212,0.35), 0 12px 40px rgba(6,182,212,0.18)'
           },
           keyframes: {
-            floaty: {
-              '0%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-8px)' },
-              '100%': { transform: 'translateY(0px)' }
-            },
-            hue: {
-              '0%': { filter: 'hue-rotate(0deg)' },
-              '100%': { filter: 'hue-rotate(360deg)' }
-            }
+            floaty: { '0%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-8px)' }, '100%': { transform: 'translateY(0)' } },
+            hue: { '0%': { filter: 'hue-rotate(0deg)' }, '100%': { filter: 'hue-rotate(360deg)' } },
+            spinbounce: { '0%': { transform: 'rotate(0) scale(1)' }, '50%': { transform: 'rotate(180deg) scale(1.15)' }, '100%': { transform: 'rotate(360deg) scale(1)' } },
+            pulseBorder: { '0%': { boxShadow: '0 0 0 0 rgba(6,182,212,0.35)' }, '70%': { boxShadow: '0 0 0 10px rgba(6,182,212,0)' }, '100%': { boxShadow: '0 0 0 0 rgba(6,182,212,0)' } }
           },
           animation: {
             floaty: 'floaty 6s ease-in-out infinite',
-            hue: 'hue 12s linear infinite'
+            hue: 'hue 12s linear infinite',
+            spinbounce: 'spinbounce .6s ease-in-out',
+            pulseBorder: 'pulseBorder 2.2s ease-out infinite'
           }
         }
       }
@@ -56,356 +52,371 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Nunito:wght@300;400;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
 
-  <!-- GSAP + ScrollTrigger + Observer -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
+  <!-- GSAP + plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
 
   <!-- Typed.js -->
   <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 
-  <!-- Font Awesome for icons -->
+  <!-- Icons -->
   <script src="https://kit.fontawesome.com/9b2f9a2c6b.js" crossorigin="anonymous"></script>
 
   <style>
-    /* Small non-Tailwind helpers (keeps visual polish) */
-    :root { --bg-dark: #071025; --glass: rgba(255,255,255,0.03); }
-    .glass { background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid rgba(255,255,255,0.03); box-shadow: 0 8px 30px rgba(2,6,23,0.6); }
-    .gradient-anim {
-      background: conic-gradient(from 180deg at 50% 50%, rgba(6,182,212,0.12), rgba(124,58,237,0.12), rgba(6,182,212,0.12));
-      animation: hue 12s linear infinite;
-    }
-    .tilt { transform-style: preserve-3d; will-change: transform; }
+    :root { --glass: rgba(255,255,255,0.04); }
+    .glass { background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(6px); }
     .card-border { border-radius: 14px; }
-    /* ensure typed cursor visible in dark mode */
-    .typed-cursor { opacity: 1; font-weight:700; color:rgb(6 182 212); }
+    .tilt { transform-style: preserve-3d; will-change: transform; }
+    .typed-cursor { font-weight: 700; color: rgb(6 182 212); }
+    .focus-outline :focus-visible { outline: 2px solid #06b6d4; outline-offset: 2px; border-radius: 8px; }
+    /* Particle canvas fills the background */
+    #particles { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    canvas { display: block; }
   </style>
 </head>
-<body class="bg-gradient-to-b from-slate-900 to-slate-950 text-slate-100 font-body">
+<body class="bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800 dark:from-slate-900 dark:to-slate-950 dark:text-slate-100 font-body overflow-x-hidden">
 
-  <!-- Wrapper -->
-  <div id="app" class="min-h-screen">
+  <!-- Animated ambient background blobs -->
+  <div aria-hidden class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -left-40 -top-40 w-[780px] h-[780px] rounded-full bg-gradient-to-br from-cyan-500/15 to-violet-600/10 blur-3xl animate-hue"></div>
+    <div class="absolute right-[-160px] top-20 w-[560px] h-[560px] rounded-full bg-gradient-to-tr from-rose-400/10 to-indigo-500/8 blur-3xl"></div>
+  </div>
+  <!-- Particles -->
+  <div id="particles"></div>
 
-    <!-- Floating animated background layers -->
-    <div aria-hidden class="fixed inset-0 -z-10 overflow-hidden">
-      <div class="absolute -left-40 -top-40 w-[720px] h-[720px] rounded-full bg-gradient-to-br from-cyan-500/10 to-violet-600/6 blur-3xl animate-hue"></div>
-      <div class="absolute right-[-160px] top-20 w-[520px] h-[520px] rounded-full bg-gradient-to-tr from-rose-400/8 to-indigo-500/6 blur-3xl"></div>
-    </div>
+  <!-- Curtain page-load reveal -->
+  <div id="curtain" class="fixed inset-0 bg-white dark:bg-slate-900 z-50"></div>
 
-    <!-- NAV / HEAD -->
-    <header class="max-w-6xl mx-auto px-6 md:px-8 py-6 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3">
-        <div id="logo" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] font-heading text-lg shadow-fancy animate-floaty">
-          SG
-        </div>
-        <div>
-          <h1 class="text-xl md:text-2xl font-heading">Sajjan <span class="text-brand-300 font-extrabold">Gautam</span></h1>
-          <p class="text-xs md:text-sm text-slate-400 -mt-0.5">Front-end • Full-stack • Problem Solver</p>
-        </div>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <!-- theme toggle -->
-        <button id="themeToggle" aria-label="Toggle theme" class="p-2 rounded-full glass hover:scale-105 transition-transform">
-          <i id="themeIcon" class="fa-solid fa-moon text-slate-200"></i>
-        </button>
-
-        <nav class="hidden md:flex items-center gap-3">
-          <a href="#projects" class="px-3 py-2 rounded-md bg-white/3 text-cyan-200 hover:bg-white/6 transition">Projects</a>
-          <a href="#experience" class="px-3 py-2 rounded-md bg-white/3 text-slate-200/80 hover:bg-white/6 transition">Experience</a>
-          <a href="#contact" class="px-3 py-2 rounded-md bg-white/3 text-slate-200/80 hover:bg-white/6 transition">Contact</a>
-        </nav>
+  <!-- ===== NAV ===== -->
+  <header class="max-w-6xl mx-auto px-6 md:px-8 py-6 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3">
+      <div id="logo" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] font-heading text-lg shadow-fancy animate-floaty">SG</div>
+      <div>
+        <h1 class="text-xl md:text-2xl font-heading">Sajjan <span class="text-brand-700 dark:text-brand-300 font-extrabold">Gautam</span></h1>
+        <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 -mt-0.5">Front-end • Full-stack • Problem Solver</p>
       </div>
-    </header>
+    </a>
 
-    <!-- HERO -->
-    <main class="max-w-6xl mx-auto px-6 md:px-8 pb-12">
-      <section class="grid md:grid-cols-2 gap-8 items-center">
-        <div class="space-y-6">
-          <div class="space-y-1">
-            <h2 class="text-3xl md:text-5xl font-heading tracking-tight leading-tight">
-              Hi, I’m Sajjan — <span id="typed" class="text-brand-300"></span>
-            </h2>
-            <p class="text-slate-300 max-w-xl">
-              I build immersive front-end experiences and reliable back-end systems. I focus on performance, accessibility, and delightful details.
+    <div class="flex items-center gap-2">
+      <nav class="hidden md:flex items-center gap-2">
+        <a href="#projects" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Projects</a>
+        <a href="#experience" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Experience</a>
+        <a href="#contact" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Contact</a>
+      </nav>
+      <button id="themeToggle" aria-label="Toggle theme" class="ml-2 p-2 rounded-full glass hover:scale-105 transition-transform">
+        <i id="themeIcon" class="fa-solid fa-moon text-slate-700 dark:text-slate-200"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <main id="main" class="max-w-6xl mx-auto px-6 md:px-8 pb-16 focus-outline">
+    <section class="grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h2 class="text-3xl md:text-5xl font-heading tracking-tight leading-tight">
+          Hi, I’m Sajjan — <span id="typed" class="text-brand-700 dark:text-brand-300"></span>
+        </h2>
+        <p class="mt-3 text-slate-700 dark:text-slate-300 max-w-xl">
+          I build immersive front-end experiences and reliable back-end systems. I focus on performance, accessibility, and delightful details.
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-3 items-center">
+          <a href="#projects" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] font-semibold shadow-lg transform hover:scale-[1.03] transition">
+            View projects <i class="fas fa-arrow-right ml-1"></i>
+          </a>
+          <a href="#contact" class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-black/10 text-slate-800 hover:bg-black/5 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/10 transition">
+            Get in touch
+          </a>
+          <a href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-black/10 text-slate-800 hover:bg-black/5 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/10 transition">
+            <i class="far fa-file-pdf"></i> Resume
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="mt-6 grid grid-cols-3 gap-4 max-w-sm">
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading counter" data-target="18">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Months experience</div>
+          </div>
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading counter" data-target="10">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Projects</div>
+          </div>
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading counter" data-target="6">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Technologies</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="relative">
+        <div class="rounded-2xl overflow-hidden shadow-fancy glass p-6">
+          <div class="flex items-center gap-4">
+            <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] font-heading text-xl animate-floaty">SG</div>
+            <div>
+              <div class="text-sm text-slate-700 dark:text-slate-300">Vanier College — AEC in Software Development</div>
+              <div class="text-lg font-semibold mt-1">Completed • Aug 2025 ✅</div>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-3">
+            <div class="text-sm text-slate-700 dark:text-slate-300">Technical highlights</div>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div class="text-xs text-slate-800 dark:text-slate-200 bg-black/5 dark:bg-white/5 p-2 rounded">Java</div>
+              <div class="text-xs text-slate-800 dark:text-slate-200 bg-black/5 dark:bg-white/5 p-2 rounded">C# / .NET</div>
+              <div class="text-xs text-slate-800 dark:text-slate-200 bg-black/5 dark:bg-white/5 p-2 rounded">React</div>
+              <div class="text-xs text-slate-800 dark:text-slate-200 bg-black/5 dark:bg-white/5 p-2 rounded">MSSQL</div>
+            </div>
+          </div>
+
+          <!-- Skill bars + counters -->
+          <div class="mt-6">
+            <div class="text-xs text-slate-700 dark:text-slate-300 mb-2">Skill progress</div>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-xs text-slate-700 dark:text-slate-300"><span>JavaScript</span><span><span class="skill-num" data-target="85">0</span>%</span></div>
+                <div class="w-full h-2 bg-black/10 dark:bg-white/10 rounded-full mt-2 overflow-hidden">
+                  <div class="bar js-bar h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 w-0"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs text-slate-700 dark:text-slate-300"><span>React</span><span><span class="skill-num" data-target="78">0</span>%</span></div>
+                <div class="w-full h-2 bg-black/10 dark:bg-white/10 rounded-full mt-2 overflow-hidden">
+                  <div class="bar react-bar h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 w-0"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs text-slate-700 dark:text-slate-300"><span>Java / Jakarta</span><span><span class="skill-num" data-target="72">0</span>%</span></div>
+                <div class="w-full h-2 bg-black/10 dark:bg-white/10 rounded-full mt-2 overflow-hidden">
+                  <div class="bar java-bar h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 w-0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- floating badge -->
+        <div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center text-xs text-slate-800 dark:text-slate-100 shadow-glow">
+          <div class="text-center">
+            <div class="font-heading text-sm">Open to</div>
+            <div class="text-xs mt-1">Collaberations & Junior Dev roles</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="mt-14">
+      <div class="glass p-6 rounded-2xl card-border">
+        <h2 class="text-2xl font-heading">About Me</h2>
+        <p class="mt-3 text-slate-700 dark:text-slate-300 max-w-4xl">
+          I’m a pragmatic developer who values clarity, accessibility and delivering features that help real people.
+          My background includes building desktop and web apps, migrating WordPress sites, and contributing to team projects for community organizations.
+          I care about clean code, performant front-ends, and reliable back-ends.
+        </p>
+
+        <div class="mt-6 grid md:grid-cols-3 gap-6">
+          <div class="p-4 bg-black/5 dark:bg-white/5 rounded-lg">
+            <h4 class="font-semibold">What I enjoy</h4>
+            <ul class="mt-2 text-sm text-slate-700 dark:text-slate-300 space-y-1">
+              <li>Shipping polished, accessible UIs</li>
+              <li>Designing clear REST APIs & schemas</li>
+              <li>Improving performance and DX</li>
+            </ul>
+          </div>
+          <div class="p-4 bg-black/5 dark:bg-white/5 rounded-lg">
+            <h4 class="font-semibold">My goals</h4>
+            <ul class="mt-2 text-sm text-slate-700 dark:text-slate-300 space-y-1">
+              <li>Join a collaborative engineering team</li>
+              <li>Grow in testing & DevOps practices</li>
+              <li>Contribute to open-source projects</li>
+            </ul>
+          </div>
+          <div class="p-4 bg-black/5 dark:bg-white/5 rounded-lg">
+            <h4 class="font-semibold">Tools I use</h4>
+            <div class="mt-2 flex flex-wrap gap-2 text-xs">
+              <span class="px-2 py-1 bg-black/10 dark:bg-white/10 rounded">VS Code</span>
+              <span class="px-2 py-1 bg-black/10 dark:bg-white/10 rounded">Git</span>
+              <span class="px-2 py-1 bg-black/10 dark:bg-white/10 rounded">Postman</span>
+              <span class="px-2 py-1 bg-black/10 dark:bg-white/10 rounded">Docker (learning)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects" class="mt-14">
+      <h2 class="text-2xl font-heading mb-4">Selected Projects</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- BMCT Cars (car dealership) -->
+        <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02] hover:shadow-glow" data-project>
+          <div class="flex gap-4 items-center">
+            <div class="thumb w-36 h-24 rounded-md bg-cover bg-center shadow-lg pulse" style="background-image:url('https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1400&q=60')"></div>
+            <div>
+              <h3 class="font-heading text-lg">BMCT Cars — Front End</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">Responsive car dealership front-end with booking flows and dynamic comparison UI.</p>
+              <div class="mt-3 flex gap-2">
+                <a class="text-brand-700 dark:text-brand-300 text-sm" href="https://github.com/sajjan15/Front-End-Web-Programming" target="_blank">View repo ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Clinic Management System (Java/Jakarta) -->
+        <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02] hover:shadow-glow" data-project>
+          <div class="flex gap-4 items-center">
+            <div class="thumb w-36 h-24 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1586773860416-65f9f3f0f6d1?auto=format&fit=crop&w=1400&q=60')"></div>
+            <div>
+              <h3 class="font-heading text-lg">Clinic Management System</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">Java (Jakarta) backend with REST APIs for scheduling, patient & doctor management.</p>
+              <div class="mt-3 flex gap-2">
+                <a class="text-brand-700 dark:text-brand-300 text-sm" href="https://github.com/sajjan15/Web-Services" target="_blank">View repo ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Employee Management System (C#/.NET) -->
+        <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02] hover:shadow-glow" data-project>
+          <div class="flex gap-4 items-center">
+            <div class="thumb w-36 h-24 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=1400&q=60')"></div>
+            <div>
+              <h3 class="font-heading text-lg">Employee Management System</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">C# / .NET Core backend for HR workflows, payroll & role-based access control.</p>
+              <div class="mt-3 flex gap-2">
+                <a class="text-brand-700 dark:text-brand-300 text-sm" href="https://github.com/sajjan15/Application-Development-I" target="_blank">View repo ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Open source contributions -->
+        <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02] hover:shadow-glow" data-project>
+          <div class="flex gap-4 items-center">
+            <div class="thumb w-36 h-24 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=60')"></div>
+            <div>
+              <h3 class="font-heading text-lg">Open-source Contributions</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">Small fixes & helpers across repos to improve DX.</p>
+              <div class="mt-3 flex gap-2">
+                <a class="text-brand-700 dark:text-brand-300 text-sm" href="https://github.com/sajjan15" target="_blank">View GitHub ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== EXPERIENCE / TIMELINE ===== -->
+    <section id="experience" class="mt-14">
+      <h2 class="text-2xl font-heading mb-4">Experience & Timeline</h2>
+      <div class="space-y-6">
+        <div class="p-4 rounded-2xl glass card-border flex gap-4 items-start timeline-item">
+          <div class="w-3 h-3 rounded-full bg-brand-700 dark:bg-brand-300 mt-3"></div>
+          <div>
+            <div class="font-semibold">Forum Research — Outbound Interviewer</div>
+            <div class="text-xs text-slate-700 dark:text-slate-300">Jan 2024 — May 2024</div>
+            <p class="text-sm text-slate-700 dark:text-slate-300 mt-2">
+              Conducted computer-assisted telephone surveys; maintained data quality and confidentiality.
             </p>
           </div>
+        </div>
 
-          <div class="flex flex-wrap gap-3 items-center">
-            <a href="#projects" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] font-semibold shadow-lg transform hover:scale-[1.03] transition">View projects <i class="fas fa-arrow-right ml-1"></i></a>
-            <a href="#contact" class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-white/6 text-slate-200 hover:bg-white/5 transition">Get in touch</a>
-          </div>
-
-          <!-- stats -->
-          <div class="mt-4 grid grid-cols-3 gap-4 max-w-sm">
-            <div class="bg-white/3 p-4 rounded-2xl glass card-border">
-              <div class="text-2xl font-heading counter" data-target="18">0</div>
-              <div class="text-xs text-slate-300">Months experience</div>
-            </div>
-            <div class="bg-white/3 p-4 rounded-2xl glass card-border">
-              <div class="text-2xl font-heading counter" data-target="10">0</div>
-              <div class="text-xs text-slate-300">Projects</div>
-            </div>
-            <div class="bg-white/3 p-4 rounded-2xl glass card-border">
-              <div class="text-2xl font-heading counter" data-target="6">0</div>
-              <div class="text-xs text-slate-300">Technologies</div>
-            </div>
+        <div class="p-4 rounded-2xl glass card-border flex gap-4 items-start timeline-item">
+          <div class="w-3 h-3 rounded-full bg-brand-700 dark:bg-brand-300 mt-3"></div>
+          <div>
+            <div class="font-semibold">Consultation SOS — Team Project</div>
+            <div class="text-xs text-slate-700 dark:text-slate-300">Ongoing</div>
+            <p class="text-sm text-slate-700 dark:text-slate-300 mt-2">
+              Migrating WordPress sites and improving front-ends for nonprofits and shelters.
+            </p>
           </div>
         </div>
 
-        <aside class="relative">
-          <div class="rounded-2xl overflow-hidden shadow-fancy glass p-6">
-            <div class="flex items-center gap-4">
-              <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] font-heading text-xl animate-floaty">SG</div>
-              <div>
-                <div class="text-sm text-slate-300">Vanier College — AEC in Software Development</div>
-                <div class="text-lg font-semibold mt-1">Completed • Aug 2025 ✅</div>
-              </div>
-            </div>
-
-            <div class="mt-6 space-y-3">
-              <div class="text-sm text-slate-300">Technical highlights</div>
-              <div class="grid grid-cols-2 gap-2 mt-2">
-                <div class="text-xs text-slate-200/90 bg-white/3 p-2 rounded">Java</div>
-                <div class="text-xs text-slate-200/90 bg-white/3 p-2 rounded">C# / .NET</div>
-                <div class="text-xs text-slate-200/90 bg-white/3 p-2 rounded">React</div>
-                <div class="text-xs text-slate-200/90 bg-white/3 p-2 rounded">MSSQL</div>
-              </div>
-            </div>
-
-            <div class="mt-6">
-              <div class="text-xs text-slate-300 mb-2">Skill progress</div>
-              <div class="space-y-3">
-                <div>
-                  <div class="flex justify-between text-xs text-slate-300"><span>JavaScript</span><span>85%</span></div>
-                  <div class="w-full h-2 bg-white/6 rounded-full mt-2 overflow-hidden"><div class="js-bar h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 w-0"></div></div>
-                </div>
-                <div>
-                  <div class="flex justify-between text-xs text-slate-300"><span>React</span><span>78%</span></div>
-                  <div class="w-full h-2 bg-white/6 rounded-full mt-2 overflow-hidden"><div class="react-bar h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 w-0"></div></div>
-                </div>
-                <div>
-                  <div class="flex justify-between text-xs text-slate-300"><span>Java / Jakarta</span><span>72%</span></div>
-                  <div class="w-full h-2 bg-white/6 rounded-full mt-2 overflow-hidden"><div class="java-bar h-2 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 w-0"></div></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- floating badge -->
-          <div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-white/5 border border-white/6 flex items-center justify-center text-xs text-slate-100">
-            <div class="text-center">
-              <div class="font-heading text-sm">Open to</div>
-              <div class="text-xs mt-1">Internships & Junior Dev roles</div>
-            </div>
-          </div>
-        </aside>
-      </section>
-
-      <!-- ABOUT -->
-      <section class="mt-12">
-        <div class="glass p-6 rounded-2xl card-border">
-          <h2 class="text-2xl font-heading">About Me</h2>
-          <p class="mt-3 text-slate-300 max-w-4xl">
-            I’m a pragmatic developer who values clarity, accessibility and delivering features that help real people. My background includes building desktop and web apps, migrating WordPress sites, and contributing to team projects for community organizations. I care about clean code, performant front-ends, and reliable back-ends.
-          </p>
-
-          <div class="mt-6 grid md:grid-cols-3 gap-6">
-            <div class="p-4 bg-white/3 rounded-lg">
-              <h4 class="font-semibold">What I enjoy</h4>
-              <ul class="mt-2 text-sm text-slate-300 space-y-1">
-                <li>Shipping user interfaces with attention to detail</li>
-                <li>Designing clear APIs and database schemas</li>
-                <li>Improving performance and accessibility</li>
-              </ul>
-            </div>
-            <div class="p-4 bg-white/3 rounded-lg">
-              <h4 class="font-semibold">My goals</h4>
-              <ul class="mt-2 text-sm text-slate-300 space-y-1">
-                <li>Join a collaborative engineering team</li>
-                <li>Grow in testing and DevOps practices</li>
-                <li>Contribute to open-source projects</li>
-              </ul>
-            </div>
-            <div class="p-4 bg-white/3 rounded-lg">
-              <h4 class="font-semibold">Tools I use</h4>
-              <div class="mt-2 flex flex-wrap gap-2 text-xs">
-                <span class="px-2 py-1 bg-white/4 rounded">VS Code</span>
-                <span class="px-2 py-1 bg-white/4 rounded">Git</span>
-                <span class="px-2 py-1 bg-white/4 rounded">Postman</span>
-                <span class="px-2 py-1 bg-white/4 rounded">Docker (learning)</span>
-              </div>
-            </div>
+        <div class="p-4 rounded-2xl glass card-border flex gap-4 items-start timeline-item">
+          <div class="w-3 h-3 rounded-full bg-brand-700 dark:bg-brand-300 mt-3"></div>
+          <div>
+            <div class="font-semibold">Vanier College — AEC in Software Development</div>
+            <div class="text-xs text-slate-700 dark:text-slate-300">Completed • Aug 2025</div>
+            <p class="text-sm text-slate-700 dark:text-slate-300 mt-2">
+              Completed curriculum covering desktop, web, and mobile application development.
+            </p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- PROJECTS (with relevant images) -->
-      <section id="projects" class="mt-12">
-        <h2 class="text-2xl font-heading mb-4">Selected Projects</h2>
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="mt-14">
+      <h2 class="text-2xl font-heading mb-4">Testimonials</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <blockquote class="p-6 rounded-2xl glass card-border transform hover:scale-[1.02] transition testimonial">
+          <p class="text-slate-700 dark:text-slate-300">“Sajjan consistently delivered clean code and communicated well with the team.”</p>
+          <footer class="mt-4 font-semibold text-xs text-slate-800 dark:text-slate-200">— Team Lead</footer>
+        </blockquote>
+        <blockquote class="p-6 rounded-2xl glass card-border transform hover:scale-[1.02] transition testimonial">
+          <p class="text-slate-700 dark:text-slate-300">“Fast learner and eager to improve — contributed critical fixes to our project on time.”</p>
+          <footer class="mt-4 font-semibold text-xs text-slate-800 dark:text-slate-200">— Senior Developer</footer>
+        </blockquote>
+      </div>
+    </section>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          <!-- BMCT Cars (car dealership) -->
-          <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02]" data-project>
-            <div class="flex gap-4 items-center">
-              <div class="w-32 h-20 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=60')"></div>
-              <div>
-                <h3 class="font-heading text-lg">BMCT Cars — Front End</h3>
-                <p class="text-sm text-slate-300 mt-1">Responsive car dealership front-end with booking flows and dynamic comparison UI.</p>
-                <div class="mt-3 flex gap-2">
-                  <a class="text-cyan-300 text-sm" href="https://github.com/sajjan15/Front-End-Web-Programming" target="_blank">View repo ↗</a>
-                </div>
-              </div>
-            </div>
-          </article>
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="mt-14 mb-24 grid md:grid-cols-2 gap-8">
+      <div class="glass p-6 rounded-2xl card-border">
+        <h2 class="text-2xl font-heading">Contact</h2>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          I'm open to collaborations and junior developer roles. Reach out for contract work or to chat about a project.
+        </p>
 
-          <!-- Clinic Management System (Java/Jakarta) -->
-          <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02]" data-project>
-            <div class="flex gap-4 items-center">
-              <div class="w-32 h-20 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1586773860416-65f9f3f0f6d1?auto=format&fit=crop&w=1200&q=60')"></div>
-              <div>
-                <h3 class="font-heading text-lg">Clinic Management System</h3>
-                <p class="text-sm text-slate-300 mt-1">Java (Jakarta) backend with REST APIs for scheduling, patient and doctor management.</p>
-                <div class="mt-3 flex gap-2">
-                  <a class="text-cyan-300 text-sm" href="https://github.com/sajjan15/Web-Services" target="_blank">View repo ↗</a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Employee Management System (C#/.NET) -->
-          <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02]" data-project>
-            <div class="flex gap-4 items-center">
-              <div class="w-32 h-20 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=1200&q=60')"></div>
-              <div>
-                <h3 class="font-heading text-lg">Employee Management System</h3>
-                <p class="text-sm text-slate-300 mt-1">C# / .NET Core backend for HR workflows, payroll, and role-based access control.</p>
-                <div class="mt-3 flex gap-2">
-                  <a class="text-cyan-300 text-sm" href="https://github.com/sajjan15/Application-Development-I" target="_blank">View repo ↗</a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Open source contributions -->
-          <article class="tilt p-4 rounded-2xl glass card-border overflow-hidden transform transition hover:-translate-y-2 hover:scale-[1.02]" data-project>
-            <div class="flex gap-4 items-center">
-              <div class="w-32 h-20 rounded-md bg-cover bg-center shadow-lg" style="background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=60')"></div>
-              <div>
-                <h3 class="font-heading text-lg">Open-source Contributions</h3>
-                <p class="text-sm text-slate-300 mt-1">Small fixes and helpers across different repositories to improve developer experience.</p>
-                <div class="mt-3 flex gap-2">
-                  <a class="text-cyan-300 text-sm" href="https://github.com/sajjan15" target="_blank">View GitHub ↗</a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- EXPERIENCE timeline -->
-      <section id="experience" class="mt-12">
-        <h2 class="text-2xl font-heading mb-4">Experience & Timeline</h2>
-        <div class="space-y-6">
-          <div class="p-4 rounded-2xl glass card-border flex gap-4 items-start">
-            <div class="w-3 h-3 rounded-full bg-brand-300 mt-3"></div>
-            <div>
-              <div class="font-semibold">Forum Research — Outbound Interviewer</div>
-              <div class="text-xs text-slate-300">Jan 2024 — May 2024</div>
-              <p class="text-sm text-slate-300 mt-2">Conducted computer-assisted telephone surveys; maintained data quality and confidentiality.</p>
-            </div>
+        <!-- mailto fallback form -->
+        <form action="mailto:sajjangautam28@gmail.com" method="post" enctype="text/plain" class="mt-4 space-y-3">
+          <input name="name" placeholder="Your name" class="w-full p-3 rounded bg-transparent border border-black/10 dark:border-white/10 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 transition" required>
+          <input name="email" placeholder="Your email" class="w-full p-3 rounded bg-transparent border border-black/10 dark:border-white/10 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 transition" required>
+          <textarea name="message" placeholder="Message" rows="5" class="w-full p-3 rounded bg-transparent border border-black/10 dark:border-white/10 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 transition" required></textarea>
+          <div class="flex gap-3">
+            <button type="submit" class="px-4 py-2 rounded-md bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] font-semibold hover:shadow-glow transition">Send</button>
+            <a class="px-4 py-2 rounded-md border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/10 transition" href="https://formspree.io/f/your-id" target="_blank">Use Formspree</a>
           </div>
+        </form>
+      </div>
 
-          <div class="p-4 rounded-2xl glass card-border flex gap-4 items-start">
-            <div class="w-3 h-3 rounded-full bg-brand-300 mt-3"></div>
-            <div>
-              <div class="font-semibold">Consultation SOS — Team Project</div>
-              <div class="text-xs text-slate-300">Ongoing</div>
-              <p class="text-sm text-slate-300 mt-2">Migrating WordPress sites and improving front-ends for nonprofits and shelters.</p>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-2xl glass card-border flex gap-4 items-start">
-            <div class="w-3 h-3 rounded-full bg-brand-300 mt-3"></div>
-            <div>
-              <div class="font-semibold">Vanier College — AEC in Software Development</div>
-              <div class="text-xs text-slate-300">Completed • Aug 2025</div>
-              <p class="text-sm text-slate-300 mt-2">Completed curriculum covering desktop, web, and mobile application development.</p>
-            </div>
-          </div>
+      <aside class="p-6 rounded-2xl glass card-border">
+        <h3 class="text-lg font-semibold">Quick Contact</h3>
+        <div class="mt-3 text-sm text-slate-700 dark:text-slate-300 space-y-2">
+          <div><strong>Email:</strong> <a class="text-brand-700 dark:text-brand-300" href="mailto:sajjangautam28@gmail.com">sajjangautam28@gmail.com</a></div>
+          <div><strong>Phone:</strong> +1 514-576-4015</div>
+          <div><strong>Location:</strong> Toronto, ON, Canada</div>
+          <div><strong>GitHub:</strong> <a class="text-brand-700 dark:text-brand-300" href="https://github.com/sajjan15" target="_blank">github.com/sajjan15</a></div>
+          <div><strong>LinkedIn:</strong> <a class="text-brand-700 dark:text-brand-300" href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank">linkedin.com/in/sajjan-gautam-68891a19a</a></div>
         </div>
-      </section>
+      </aside>
+    </section>
 
-      <!-- TESTIMONIALS -->
-      <section class="mt-12">
-        <h2 class="text-2xl font-heading mb-4">Testimonials</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <blockquote class="p-6 rounded-2xl glass card-border transform hover:scale-[1.02] transition">
-            <p class="text-slate-300">“Sajjan consistently delivered clean code and communicated well with the team.”</p>
-            <footer class="mt-4 font-semibold text-xs text-slate-200">— Team Lead</footer>
-          </blockquote>
-          <blockquote class="p-6 rounded-2xl glass card-border transform hover:scale-[1.02] transition">
-            <p class="text-slate-300">“Fast learner and eager to improve — contributed critical fixes to our project on time.”</p>
-            <footer class="mt-4 font-semibold text-xs text-slate-200">— Senior Developer</footer>
-          </blockquote>
-        </div>
-      </section>
+    <!-- ===== FOOTER ===== -->
+    <footer class="max-w-6xl mx-auto px-6 md:px-8 py-6 text-center text-slate-600 dark:text-slate-400">
+      <div class="flex items-center justify-center gap-4">
+        <a href="https://github.com/sajjan15" target="_blank" class="hover:text-brand-700 dark:hover:text-brand-300 transition"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" class="hover:text-brand-700 dark:hover:text-brand-300 transition"><i class="fab fa-linkedin"></i></a>
+        <a href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" class="hover:text-brand-700 dark:hover:text-brand-300 transition"><i class="far fa-file-pdf"></i></a>
+      </div>
+      <div class="mt-3 text-xs">© <span id="year"></span> Sajjan Gautam — Made with care</div>
+    </footer>
+  </main>
 
-      <!-- CONTACT -->
-      <section id="contact" class="mt-12 mb-24 grid md:grid-cols-2 gap-8">
-        <div class="glass p-6 rounded-2xl card-border">
-          <h2 class="text-2xl font-heading">Contact</h2>
-          <p class="mt-2 text-slate-300">I'm open to Collaberations and junior developer roles. Reach out for collaborations, contract work or to chat about a project.</p>
+  <!-- Back to top -->
+  <button id="backToTop" aria-label="Back to top" class="fixed right-6 bottom-6 p-3 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] shadow-lg hidden">↑</button>
 
-          <!-- mailto fallback form -->
-          <form action="mailto:sajjangautam28@gmail.com" method="post" enctype="text/plain" class="mt-4 space-y-3">
-            <input name="name" placeholder="Your name" class="w-full p-3 rounded bg-transparent border border-white/6 text-slate-100" required>
-            <input name="email" placeholder="Your email" class="w-full p-3 rounded bg-transparent border border-white/6 text-slate-100" required>
-            <textarea name="message" placeholder="Message" rows="5" class="w-full p-3 rounded bg-transparent border border-white/6 text-slate-100" required></textarea>
-            <div class="flex gap-3">
-              <button type="submit" class="px-4 py-2 rounded-md bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] font-semibold">Send</button>
-              <a class="px-4 py-2 rounded-md border border-white/6" href="https://formspree.io/f/your-id" target="_blank">Use Formspree</a>
-            </div>
-          </form>
-        </div>
-
-        <aside class="p-6 rounded-2xl glass card-border">
-          <h3 class="text-lg font-semibold">Quick Contact</h3>
-          <div class="mt-3 text-sm text-slate-300 space-y-2">
-            <div><strong>Email:</strong> <a class="text-cyan-300" href="mailto:sajjangautam28@gmail.com">sajjangautam28@gmail.com</a></div>
-            <div><strong>Phone:</strong> +1 514-576-4015</div>
-            <div><strong>Location:</strong> Toronto, ON, Canada</div>
-            <div><strong>GitHub:</strong> <a class="text-cyan-300" href="https://github.com/sajjan15">github.com/sajjan15</a></div>
-            <div><strong>LinkedIn:</strong> <a class="text-cyan-300" href="https://www.linkedin.com/in/sajjan-gautam-68891a19a">linkedin</a></div>
-          </div>
-        </aside>
-      </section>
-
-      <!-- FOOTER -->
-      <footer class="max-w-6xl mx-auto px-6 md:px-8 py-6 text-center text-slate-400">
-        <div class="flex items-center justify-center gap-4">
-          <a href="https://github.com/sajjan15" target="_blank" class="hover:text-cyan-300"><i class="fab fa-github"></i></a>
-          <a href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" class="hover:text-cyan-300"><i class="fab fa-linkedin"></i></a>
-          <a href="assets/Sajjan-Gautam-Resume.pdf" target="_blank" class="hover:text-cyan-300"><i class="far fa-file-pdf"></i></a>
-        </div>
-        <div class="mt-3 text-xs">© <span id="year"></span> Sajjan Gautam — Made with care</div>
-      </footer>
-
-    </main>
-  </div>
-
-  <!-- back to top -->
-  <button id="backToTop" class="fixed right-6 bottom-6 p-3 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] shadow-lg hidden">
-    ↑
-  </button>
-
-  <!-- Scripts: typed, gsap animation init, counters, tilt, theme toggle -->
+  <!-- ===== SCRIPTS ===== -->
   <script>
-    // set year
+    // ===== Utilities =====
+    const $ = (sel, parent=document) => parent.querySelector(sel);
+    const $$ = (sel, parent=document) => Array.from(parent.querySelectorAll(sel));
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Typed.js for headline
+    // ===== Typed headline =====
     new Typed('#typed', {
       strings: ['Front-end Developer', 'Full-stack Builder', 'Problem Solver', 'UI Enthusiast'],
       typeSpeed: 55,
@@ -414,117 +425,145 @@
       loop: true
     });
 
-    // GSAP setup
-    gsap.registerPlugin(ScrollTrigger, Observer);
-
-    // entrance animations for major blocks
-    gsap.from('header', { y: -20, opacity: 0, duration: 0.8, ease: 'power3.out' });
-    gsap.from('#app main section', {
-      opacity: 0,
-      y: 30,
-      duration: 0.9,
-      stagger: 0.18,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: '#app main', start: 'top 90%' }
-    });
-
-    // animate counters when visible
-    document.querySelectorAll('.counter').forEach(el => {
-      const target = +el.dataset.target;
-      gsap.fromTo(el, { innerText: 0 }, {
-        innerText: target,
-        duration: 1.4,
-        ease: 'power1.out',
-        snap: { innerText: 1 },
-        scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
-        onUpdate: function () { el.textContent = Math.floor(el.innerText); }
-      });
-    });
-
-    // skill bars animate
-    gsap.to('.js-bar', { width: '85%', duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: '.js-bar', start: 'top 90%' }});
-    gsap.to('.react-bar', { width: '78%', duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: '.react-bar', start: 'top 90%' }});
-    gsap.to('.java-bar', { width: '72%', duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: '.java-bar', start: 'top 90%' }});
-
-    // project cards tilt on mousemove (subtle)
-    document.querySelectorAll('[data-project]').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        const rotateY = (x - 0.5) * 6; // degrees
-        const rotateX = (0.5 - y) * 6;
-        gsap.to(card, { transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`, duration: 0.4, ease: 'power3.out' });
-      });
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, { transform: 'none', duration: 0.6, ease: 'power3.out' });
-      });
-    });
-
-    // reveal with stagger
-    gsap.utils.toArray('.tilt, .glass, .card-border').forEach((el, i) => {
-      gsap.from(el, { y: 20, opacity: 0, duration: 0.9, delay: i * 0.06, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' }});
-    });
-
-    // floating logo subtle animation
-    gsap.fromTo('#logo', { y: -6 }, { y: 6, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-
-    // back to top button
-    const backBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 500) backBtn.classList.remove('hidden'); else backBtn.classList.add('hidden');
-    });
-    backBtn.addEventListener('click', () => { gsap.to(window, { scrollTo: 0, duration: 0.8 }); });
-
-    // Theme toggle (light/dark) with localStorage
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
+    // ===== Theme toggle (persist to localStorage) =====
+    const themeToggle = $('#themeToggle');
+    const themeIcon = $('#themeIcon');
     const root = document.documentElement;
-
-    function applyTheme(theme) {
-      if (theme === 'light') {
+    function applyTheme(theme){
+      if(theme==='light'){
         root.classList.remove('dark');
-        document.body.classList.remove('bg-slate-900');
-        themeIcon.className = 'fa-solid fa-sun text-yellow-300';
-      } else {
+        themeIcon.className = 'fa-solid fa-sun text-yellow-500';
+      }else{
         root.classList.add('dark');
-        document.body.classList.add('bg-slate-900');
         themeIcon.className = 'fa-solid fa-moon text-slate-200';
       }
       localStorage.setItem('site-theme', theme);
     }
-
-    // init theme from saved or prefers-color-scheme
-    (function() {
+    (function initTheme(){
       const saved = localStorage.getItem('site-theme');
-      if (saved) applyTheme(saved);
-      else {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark ? 'dark' : 'light');
-      }
+      if(saved) applyTheme(saved);
+      else applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    })();
+    themeToggle.addEventListener('click', () => {
+      applyTheme(root.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    // ===== Particles background (simple canvas) =====
+    const particleHost = document.getElementById('particles');
+    const canvas = document.createElement('canvas');
+    particleHost.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    let w, h, particles = [];
+    function resizeCanvas(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+    function makeParticles(n=70) {
+      particles = Array.from({length:n}, () => ({
+        x: Math.random()*w, y: Math.random()*h, r: Math.random()*2+1,
+        dx: (Math.random()-0.5)*0.4, dy: (Math.random()-0.5)*0.4, a: Math.random()*0.5+0.35
+      }));
+    }
+    makeParticles();
+    (function drawParticles(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+        ctx.fill();
+        p.x += p.dx; p.y += p.dy;
+        if(p.x<0||p.x>w) p.dx *= -1;
+        if(p.y<0||p.y>h) p.dy *= -1;
+      });
+      requestAnimationFrame(drawParticles);
     })();
 
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      applyTheme(isDark ? 'light' : 'dark');
+    // ===== GSAP setup =====
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    // Curtain reveal
+    gsap.to('#curtain', { yPercent: -100, duration: 1.2, ease: 'power4.inOut', delay: 0.25 });
+
+    // Header entrance
+    gsap.from('header', { y: -20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.6 });
+
+    // Staggered section entrances
+    gsap.utils.toArray('#main section').forEach((sec, i) => {
+      gsap.from(sec, {
+        opacity: 0, y: 26, duration: 0.9, ease: 'power3.out', delay: 0.05 * i,
+        scrollTrigger: { trigger: sec, start: 'top 88%' }
+      });
     });
 
-    // Small accessibility: show focus outlines for keyboard navigation
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Tab') document.body.classList.add('focus-outline');
+    // Counters
+    $$('.counter').forEach(el => {
+      const target = +el.dataset.target;
+      gsap.fromTo(el, { innerText: 0 }, {
+        innerText: target, duration: 1.4, ease: 'power1.out',
+        snap: { innerText: 1 },
+        scrollTrigger: { trigger: el, start: 'top 85%' },
+        onUpdate: function(){ el.textContent = Math.floor(el.innerText); }
+      });
     });
 
-    // Optional: progressive image preload for hero / projects (preload important images)
-    const preload = (src) => new Image().src = src;
-    ['https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=60',
-     'https://images.unsplash.com/photo-1586773860416-65f9f3f0f6d1?auto=format&fit=crop&w=1200&q=60',
-     'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=1200&q=60'
-    ].forEach(preload);
+    // Skill bars + numeric counters (sync)
+    const bars = $$('.bar');
+    const nums = $$('.skill-num');
+    const skillTL = gsap.timeline({
+      scrollTrigger: { trigger: '.bar', start: 'top 92%' }
+    });
+    // animate each pair
+    bars.forEach((bar, idx) => {
+      const target = +(nums[idx]?.dataset.target || 70);
+      skillTL.to(bar, { width: `${target}%`, duration: 1.2, ease: 'back.out(1.6)' }, idx * 0.1);
+      skillTL.fromTo(nums[idx], { innerText: 0 }, { innerText: target, duration: 1.2, ease: 'power1.out',
+        snap: { innerText: 1 }, onUpdate(){ nums[idx].textContent = Math.floor(nums[idx].innerText); } }, idx * 0.1);
+    });
 
+    // Project card tilt + glow + image zoom
+    $("[data-project]") // first match check; then apply to all
+    $$('.tilt').forEach(card => {
+      const img = $('.thumb', card);
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        const rx = (0.5 - y) * 8, ry = (x - 0.5) * 8;
+        gsap.to(card, { transform: `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`, duration: 0.3, ease: 'power3.out' });
+        if(img) gsap.to(img, { scale: 1.06, duration: 0.3, ease: 'power3.out' });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { transform: 'none', duration: 0.5, ease: 'power3.out' });
+        if(img) gsap.to(img, { scale: 1, duration: 0.5, ease: 'power3.out' });
+      });
+    });
+
+    // Timeline alternate slide-in
+    $$('.timeline-item').forEach((el, i) => {
+      gsap.from(el, { x: i % 2 === 0 ? -80 : 80, opacity: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' } });
+    });
+
+    // Testimonials scale-in
+    $$('.testimonial').forEach(el => {
+      gsap.from(el, { scale: 0.86, opacity: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 92%' } });
+    });
+
+    // Floating logo infinite gentle motion
+    gsap.fromTo('#logo', { y: -6 }, { y: 6, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+    // Back to top button
+    const backBtn = $('#backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) backBtn.classList.remove('hidden'); else backBtn.classList.add('hidden');
+    });
+    backBtn.addEventListener('click', () => {
+      backBtn.classList.add('animate-spinbounce');
+      gsap.to(window, { scrollTo: 0, duration: 0.9, ease: 'power2.out' });
+      setTimeout(() => backBtn.classList.remove('animate-spinbounce'), 650);
+    });
+
+    // Accessibility: show focus outlines for keyboard users
+    window.addEventListener('keydown', (e) => { if (e.key === 'Tab') document.body.classList.add('focus-outline'); });
   </script>
-
-  <!-- GSAP ScrollTo plugin if you want smooth scrollTo usage (loaded only if used) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
-
 </body>
 </html>
